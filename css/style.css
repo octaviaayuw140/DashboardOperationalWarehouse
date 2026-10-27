@@ -1,0 +1,100 @@
+/* Palet terinspirasi logo Meratus (biru tua + merah). Nilai hex adalah perkiraan, bukan kode resmi merek:
+   ganti variabel di bawah kalau kamu punya brand guideline-nya. */
+:root{
+  --navy:#0B2A5B;--navy-deep:#071D44;--blue:#1F5FBF;--red:#D52B33;
+  --bg:#EDF1F7;--card:#fff;--ink:#0D1B33;--mut:#5A6A83;--line:#D9E2EF;--th:#F3F6FB;
+  --in:#1F5FBF;--out:#D52B33;--prev:#9DB0CC;--up:#0E8A5F;--down:#C42129;
+  --shadow:0 1px 2px rgba(11,42,91,.06),0 4px 14px rgba(11,42,91,.05);
+  color-scheme:light;
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#06132B;--card:#0D2142;--ink:#E7EEF9;--mut:#8FA3C2;--line:#1B3258;--th:#112A52;
+  --in:#5B9BFF;--out:#FF5C63;--prev:#5E7396;--up:#4FD6A0;--down:#FF7C82;--navy-deep:#030C1E;--navy:#06183A;
+  --shadow:0 1px 2px rgba(0,0,0,.3);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#06132B;--card:#0D2142;--ink:#E7EEF9;--mut:#8FA3C2;--line:#1B3258;--th:#112A52;
+  --in:#5B9BFF;--out:#FF5C63;--prev:#5E7396;--up:#4FD6A0;--down:#FF7C82;--navy-deep:#030C1E;--navy:#06183A;
+  --shadow:0 1px 2px rgba(0,0,0,.3);color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Barlow,system-ui,-apple-system,"Segoe UI",sans-serif;font-variant-numeric:tabular-nums}
+
+/* ---- Header: pita navy dengan garis merah di bawahnya ---- */
+.top{background:var(--navy);border-bottom:4px solid var(--red);
+  padding:calc(40px + env(safe-area-inset-top,0px)) 0 26px}
+.top-in{max-width:1240px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:1fr auto;gap:18px 24px;align-items:center}
+.brand{grid-column:1;grid-row:1}
+/* LOGO: ruang putih di dalam file gambar dipotong dengan object-view-box (Chrome/Edge/Opera/Safari baru),
+   lalu logo diperbesar. Atur:
+   --zoom      = besar logo (1.8 sekarang; 2.2 lebih besar lagi; panel ikut membesar)
+   --cx / --cy = ruang putih kiri-kanan / atas-bawah yang dibuang, dalam %  (makin besar = makin ter-zoom;
+                 kalau ujung logo terpotong, kecilkan angkanya) */
+.logos{--zoom:1.0;grid-column:2;grid-row:1;display:flex;align-items:center;background:#fff;border-radius:12px;padding:8px 18px}
+.logos img{display:block;box-sizing:content-box;object-fit:contain}
+.logos img:first-child{--cy:26%;--cl:2%;--cr:2%;width:calc(170px*var(--zoom));height:calc(48px*var(--zoom));object-view-box:inset(var(--cy) var(--cr) var(--cy) var(--cl))}   
+.logos img:last-child{--cy:20%;--cl:8%;--cr:2%;width:calc(140px*var(--zoom));height:calc(55px*var(--zoom));object-view-box:inset(var(--cy) var(--cr) var(--cy) var(--cl))}   
+.logos img+img{margin-left:20px;padding-left:20px;border-left:1px solid #D9E2EF}
+.bar{grid-column:1/-1;grid-row:2}
+.top h1{margin:0;color:#fff;font:600 30px/1.1 "Barlow Condensed",Barlow,system-ui,sans-serif;letter-spacing:.2px}
+.top .sub{color:#A9BEE0;margin-top:6px;font-size:13px}
+.bar{display:flex;flex-wrap:wrap;gap:8px}
+.top-in>*{min-width:0}
+.bar select{font:inherit;font-size:14px;color:var(--navy);background:#fff;border:0;border-radius:8px;padding:9px 12px;min-width:0;width:150px;max-width:100%;text-overflow:ellipsis;cursor:pointer}
+.bar select#cust{width:250px}
+.bar select#met{width:180px}
+.bar select:focus-visible{outline:3px solid #8FB6FF;outline-offset:1px}
+
+.wrap{max-width:1240px;margin:20px auto 0;padding:0 20px calc(40px + env(safe-area-inset-bottom,0px))}
+
+/* ---- Ringkasan ---- */
+.kpis{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+.kpis>*,.grid>*{min-width:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+.k{position:relative;overflow:hidden;padding-left:22px}
+.k::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--prev)}
+.k.tot::before{background:var(--navy)}.k.in::before{background:var(--in)}.k.out::before{background:var(--out)}
+.k .l{color:var(--mut);font-weight:500;font-size:14px}
+.k .v{font:600 38px/1.1 "Barlow Condensed",Barlow,sans-serif;margin:4px 0 8px;letter-spacing:.2px}
+.k.tot .v{font-size:52px}
+.k .sub{color:var(--mut);font-size:12.5px}
+.y{display:inline-block;padding:2px 9px;border-radius:999px;font-weight:600;font-size:12.5px;background:var(--th);color:var(--mut)}
+.y.up{color:var(--up);background:rgba(14,138,95,.12)}
+.y.down{color:var(--down);background:rgba(213,43,51,.12)}
+.up{color:var(--up)}.down{color:var(--down)}
+
+/* ---- Grafik & tabel ---- */
+.grid{display:grid;grid-template-columns:3fr 2fr;gap:14px;margin-bottom:14px}
+.grid.b{grid-template-columns:minmax(440px,1fr) 1fr}
+h2{margin:0 0 12px;font:600 17px/1.2 "Barlow Condensed",Barlow,sans-serif;letter-spacing:.3px;color:var(--ink)}
+.ch{position:relative;height:300px}
+.scroll{overflow:auto;max-height:460px;border-radius:8px}
+table{border-collapse:collapse;width:100%;white-space:nowrap}
+th,td{text-align:right;padding:8px 10px;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+th{position:sticky;top:0;background:var(--th);color:var(--mut);font-weight:600;font-size:13px}
+tbody tr:hover td,tr:hover td{background:var(--th)}
+td:first-child{font-weight:500}
+.note{color:var(--mut);font-size:12.5px;margin-top:10px}
+#dq{color:var(--ink);background:rgba(213,43,51,.08);border-left:4px solid var(--out);padding:8px 12px;border-radius:6px}
+#dq:empty{display:none}
+
+
+/* ---- Produktivitas ---- */
+.prod{margin-bottom:14px}
+.prod[hidden]{display:none}
+.prod-h{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.prod-h h2{margin:0}
+.sub2{color:var(--mut);font-size:12.5px;margin-top:3px}
+#pwh{font:inherit;font-size:14px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-width:170px}
+.pk{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-bottom:14px}
+.pk>div{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--th)}
+.pk .l{color:var(--mut);font-size:13px}
+.pk .v{font:600 30px/1.15 "Barlow Condensed",Barlow,sans-serif;margin:2px 0 4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.grid2>*{min-width:0}
+h3{margin:0 0 8px;font:600 15px/1.2 "Barlow Condensed",Barlow,sans-serif;letter-spacing:.3px;color:var(--ink)}
+.ch.s{height:240px}
+@media(max-width:980px){.grid2{grid-template-columns:1fr}}
+@media(max-width:980px){.kpis{grid-template-columns:1fr 1fr}.k.tot{grid-column:1/-1}.grid,.grid.b{grid-template-columns:1fr}}
+@media(max-width:560px){.top-in{grid-template-columns:1fr}.logos{grid-column:1;grid-row:1;justify-self:start}.logos{--zoom:.75;padding:6px 12px}.logos img+img{margin-left:12px;padding-left:12px}.brand{grid-row:2}.bar{grid-row:3}.top h1{font-size:25px}.bar{width:100%}.bar select,.bar select#cust,.bar select#met{flex:1 1 calc(50% - 4px);width:calc(50% - 4px)}.k.tot .v{font-size:44px}.ch{height:260px}}

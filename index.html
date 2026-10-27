@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dashboard Volume &amp; Transaksi Warehouse</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <div class="brand"><h1>Dashboard Operational Warehouse</h1><div class="sub" id="src"></div></div>
+  <div class="logos">
+    <img src="assets/images.jpg" alt="Meratus" onerror="this.remove()">
+    <img src="assets/logo-mglog.jpg" alt="MGLOG" onerror="this.remove()">
+  </div>
+  <div class="bar">
+    <select id="year" aria-label="Tahun"></select>
+    <select id="wh" aria-label="Warehouse"></select>
+    <select id="cust" aria-label="Customer"></select>
+    <select id="met" aria-label="Ukuran"><option value="trx">Jumlah transaksi</option><option value="vol">Volume (CBM)</option><option value="qty">Qty</option></select>
+  </div>
+</div></header>
+<div class="wrap">
+<div class="kpis" id="kpis"></div>
+<div class="grid">
+  <div class="card"><h2>Inbound vs outbound per bulan</h2><div class="ch"><canvas id="c1"></canvas></div></div>
+  <div class="card"><h2>Perbandingan tahunan (YoY), total per bulan</h2><div class="ch"><canvas id="c2"></canvas></div></div>
+</div>
+<div class="grid b">
+  <div class="card"><h2>Rincian per bulan</h2><div class="scroll"><table id="t1"></table></div></div>
+  <div class="card"><h2>10 customer teratas</h2><div class="ch"><canvas id="c3"></canvas></div></div>
+</div>
+<div class="card"><h2>Semua customer</h2><div class="scroll"><table id="t2"></table></div>
+<div class="note" id="dq"></div><div class="note" id="note"></div></div>
+</div>
+<section id="prod" hidden>
+  <div class="card">
+    <h2>Produktivitas per warehouse</h2>
+    <select id="pwh" aria-label="Warehouse produktivitas"></select>
+    <div class="kpis" id="pk"></div>
+    <div class="note" id="pnote"></div>
+  </div>
+  <div class="card"><h2>Produktivitas CBM/MP</h2><div class="ch"><canvas id="p1"></canvas></div></div>
+  <div class="card"><h2>Produktivitas transaksi/MP</h2><div class="ch"><canvas id="p2"></canvas></div></div>
+  <div class="card">
+    <h2>Ringkasan semua warehouse</h2>
+    <div class="scroll"><table id="pt"></table></div>
+    <div class="note" id="pn2"></div>
+  </div>
+</section>
+<script src="assets/chart.umd.min.js"></script>
+<script src="assets/data.js"></script>
+<script src="dashboard.js"></script>
+</body>
+</html>
