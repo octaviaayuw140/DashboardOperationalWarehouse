@@ -1,5 +1,3 @@
-/* Palet terinspirasi logo Meratus (biru tua + merah). Nilai hex adalah perkiraan, bukan kode resmi merek:
-   ganti variabel di bawah kalau kamu punya brand guideline-nya. */
 :root{
   --navy:#0B2A5B;--navy-deep:#071D44;--blue:#1F5FBF;--red:#D52B33;
   --bg:#EDF1F7;--card:#fff;--ink:#0D1B33;--mut:#5A6A83;--line:#D9E2EF;--th:#F3F6FB;
@@ -20,16 +18,12 @@
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Barlow,system-ui,-apple-system,"Segoe UI",sans-serif;font-variant-numeric:tabular-nums}
 
-/* ---- Header: pita navy dengan garis merah di bawahnya ---- */
+/* Header */
 .top{background:var(--navy);border-bottom:4px solid var(--red);
   padding:calc(40px + env(safe-area-inset-top,0px)) 0 26px}
 .top-in{max-width:1240px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:1fr auto;gap:18px 24px;align-items:center}
 .brand{grid-column:1;grid-row:1}
-/* LOGO: ruang putih di dalam file gambar dipotong dengan object-view-box (Chrome/Edge/Opera/Safari baru),
-   lalu logo diperbesar. Atur:
-   --zoom      = besar logo (1.8 sekarang; 2.2 lebih besar lagi; panel ikut membesar)
-   --cx / --cy = ruang putih kiri-kanan / atas-bawah yang dibuang, dalam %  (makin besar = makin ter-zoom;
-                 kalau ujung logo terpotong, kecilkan angkanya) */
+/* logo meratus dan mglog */
 .logos{--zoom:1.0;grid-column:2;grid-row:1;display:flex;align-items:center;background:#fff;border-radius:12px;padding:8px 18px}
 .logos img{display:block;box-sizing:content-box;object-fit:contain}
 .logos img:first-child{--cy:26%;--cl:2%;--cr:2%;width:calc(170px*var(--zoom));height:calc(48px*var(--zoom));object-view-box:inset(var(--cy) var(--cr) var(--cy) var(--cl))}   
@@ -47,11 +41,12 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Barlow,system
 
 .wrap{max-width:1240px;margin:20px auto 0;padding:0 20px calc(40px + env(safe-area-inset-bottom,0px))}
 
-/* ---- Ringkasan ---- */
+/*ringkas*/
 .kpis{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:12px;margin-bottom:14px}
 .kpis>*,.grid>*{min-width:0}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
 .k{position:relative;overflow:hidden;padding-left:22px}
+.k:not(.tot) .v{margin-top:22px}
 .k::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--prev)}
 .k.tot::before{background:var(--navy)}.k.in::before{background:var(--in)}.k.out::before{background:var(--out)}
 .k .l{color:var(--mut);font-weight:500;font-size:14px}
@@ -63,7 +58,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Barlow,system
 .y.down{color:var(--down);background:rgba(213,43,51,.12)}
 .up{color:var(--up)}.down{color:var(--down)}
 
-/* ---- Grafik & tabel ---- */
+/*custom grafik dan tabel*/
 .grid{display:grid;grid-template-columns:3fr 2fr;gap:14px;margin-bottom:14px}
 .grid.b{grid-template-columns:minmax(440px,1fr) 1fr}
 h2{margin:0 0 12px;font:600 17px/1.2 "Barlow Condensed",Barlow,sans-serif;letter-spacing:.3px;color:var(--ink)}
@@ -80,21 +75,34 @@ td:first-child{font-weight:500}
 #dq:empty{display:none}
 
 
-/* ---- Produktivitas ---- */
-.prod{margin-bottom:14px}
-.prod[hidden]{display:none}
-.prod-h{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
-.prod-h h2{margin:0}
+/*section productivity*/
+#prod{max-width:1240px;margin:20px auto 0;padding:0 20px calc(40px + env(safe-area-inset-bottom,0px))}
+#prod[hidden]{display:none}
+#prod>.card{margin-bottom:14px}
+#pwh{display:block;font:inherit;font-size:14px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-width:170px;margin-bottom:14px}
+#pk{grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:0 0 6px}
+#pk>div{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--th)}
+#pk .l{color:var(--mut);font-size:12px;margin-bottom:6px}
+#pk .v{font:700 26px/1.15 'JetBrains Mono',ui-monospace,Consolas,monospace;letter-spacing:-.02em;margin:20px 0 8px}
+#pk .sub{color:var(--mut);font-size:12.5px}
+#pnote{margin-top:12px}
 .sub2{color:var(--mut);font-size:12.5px;margin-top:3px}
-#pwh{font:inherit;font-size:14px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-width:170px}
-.pk{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-bottom:14px}
-.pk>div{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--th)}
-.pk .l{color:var(--mut);font-size:13px}
-.pk .v{font:600 30px/1.15 "Barlow Condensed",Barlow,sans-serif;margin:2px 0 4px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
 .grid2>*{min-width:0}
-h3{margin:0 0 8px;font:600 15px/1.2 "Barlow Condensed",Barlow,sans-serif;letter-spacing:.3px;color:var(--ink)}
+h3{margin:0 0 8px;font:700 15px/1.2 'Inter',system-ui,sans-serif;letter-spacing:-.01em;color:var(--ink)}
 .ch.s{height:240px}
 @media(max-width:980px){.grid2{grid-template-columns:1fr}}
 @media(max-width:980px){.kpis{grid-template-columns:1fr 1fr}.k.tot{grid-column:1/-1}.grid,.grid.b{grid-template-columns:1fr}}
 @media(max-width:560px){.top-in{grid-template-columns:1fr}.logos{grid-column:1;grid-row:1;justify-self:start}.logos{--zoom:.75;padding:6px 12px}.logos img+img{margin-left:12px;padding-left:12px}.brand{grid-row:2}.bar{grid-row:3}.top h1{font-size:25px}.bar{width:100%}.bar select,.bar select#cust,.bar select#met{flex:1 1 calc(50% - 4px);width:calc(50% - 4px)}.k.tot .v{font-size:44px}.ch{height:260px}}
+
+body,select,button,table{font-family:'Inter',system-ui,sans-serif}
+h1,h2{font-family:'Inter',system-ui,sans-serif;font-weight:700;letter-spacing:-.01em}
+.v{font-family:'JetBrains Mono',ui-monospace,monospace;font-weight:700;letter-spacing:-.02em}
+.k .l,.l{text-transform:uppercase;letter-spacing:.06em;font-weight:700;font-size:.8em}
+h1,.top h1,.brand h1{font-family:'Inter',system-ui,sans-serif !important;font-weight:800 !important;letter-spacing:-.02em !important}
+#t1 td:first-child,#t2 td:first-child,#pt td:first-child{font-size:12px;letter-spacing:.01em}
+#t1 td:not(:first-child),#t2 td:not(:first-child),#pt td:not(:first-child){font-size:13px !important;font-weight:500 !important}
+#t1 th,#t2 th,#pt th{font-size:12px}
+#t2 td:first-child{font-size:12px !important;letter-spacing:.01em}
+#t2 td:not(:first-child){font-size:13px !important;font-weight:500 !important}
+#t2 th{font-size:13px !important}
