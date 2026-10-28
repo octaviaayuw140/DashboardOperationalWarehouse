@@ -3,9 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Dashboard Volume &amp; Transaksi Warehouse</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<title>Dashboard Operational Warehouse</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <header class="top"><div class="top-in">
@@ -24,27 +23,27 @@
 <div class="wrap">
 <div class="kpis" id="kpis"></div>
 <div class="grid">
-  <div class="card"><h2>Inbound vs outbound per bulan</h2><div class="ch"><canvas id="c1"></canvas></div></div>
-  <div class="card"><h2>Perbandingan tahunan (YoY), total per bulan</h2><div class="ch"><canvas id="c2"></canvas></div></div>
+  <div class="card"><h2>Inbound & Outbound</h2><div class="ch"><canvas id="c1"></canvas></div></div>
+  <div class="card"><h2>Perbandingan Year on Year</h2><div class="ch"><canvas id="c2"></canvas></div></div>
 </div>
 <div class="grid b">
-  <div class="card"><h2>Rincian per bulan</h2><div class="scroll"><table id="t1"></table></div></div>
-  <div class="card"><h2>10 customer teratas</h2><div class="ch"><canvas id="c3"></canvas></div></div>
+  <div class="card"><h2>Rincian bulanan</h2><div class="scroll"><table id="t1"></table></div></div>
+  <div class="card"><h2>Top 10 customer</h2><div class="ch"><canvas id="c3"></canvas></div></div>
 </div>
 <div class="card"><h2>Semua customer</h2><div class="scroll"><table id="t2"></table></div>
 <div class="note" id="dq"></div><div class="note" id="note"></div></div>
 </div>
 <section id="prod" hidden>
   <div class="card">
-    <h2>Produktivitas per warehouse</h2>
+    <h2>Produktivitas Warehouse</h2>
     <select id="pwh" aria-label="Warehouse produktivitas"></select>
     <div class="kpis" id="pk"></div>
     <div class="note" id="pnote"></div>
   </div>
   <div class="card"><h2>Produktivitas CBM/MP</h2><div class="ch"><canvas id="p1"></canvas></div></div>
-  <div class="card"><h2>Produktivitas transaksi/MP</h2><div class="ch"><canvas id="p2"></canvas></div></div>
+  <div class="card"><h2>Produktivitas Transaksi/MP</h2><div class="ch"><canvas id="p2"></canvas></div></div>
   <div class="card">
-    <h2>Ringkasan semua warehouse</h2>
+    <h2>Ringkasan Semua Warehouse</h2>
     <div class="scroll"><table id="pt"></table></div>
     <div class="note" id="pn2"></div>
   </div>
