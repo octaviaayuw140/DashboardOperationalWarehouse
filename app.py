@@ -5,14 +5,15 @@ import pandas as pd
 from openpyxl import load_workbook
 
 BASE = Path(__file__).parent
-EXCEL_GLOB = "*.xlsx"                  # semua file Excel di folder ini dicoba dibaca dan digabung (2025, 2026, dst.); file yang formatnya beda dilewati
+EXCEL_GLOB = "*.xlsx"                  
 DATA_JS = BASE / "assets" / "data.js"
-SHEET_DATA = "Summary"                 # data transaksi gabungan inbound + outbound
-SHEET_2025 = "Produktivitas 2025"      # ringkasan 2025 di file 2026 (dipakai hanya kalau tidak ada data transaksi 2025)
+SHEET_DATA = "Summary"                 
+SHEET_2025 = "Produktivitas 2025"      
 OFFICE_BASE_2025 = "LSB"
-SHEET_PROD = "Produktivitas 2026"      # produktivitas per warehouse (CBM/MP dan transaksi/MP) + pembanding tahun lalu
-
-COLS = {  # nama kolom standar -> kemungkinan nama di Excel (huruf besar/kecil tidak masalah)
+WH_CODE = {"Surabaya": "LSB", "Balikpapan": "LBN", "Jakarta": "LJT",
+           "Bitung": "LBT", "Pontianak": "LPK", "Manado": "LMD"}   
+SHEET_PROD = "Produktivitas 2026"      
+COLS = {  
     "Month": ["MONTH", "BULAN"], "Office": ["OFFICE", "WAREHOUSE", "GUDANG"],
     "TRANSACTION DATE": ["TRANSACTION DATE", "TRANSACTIONDATE", "TANGGAL TRANSAKSI", "TANGGAL"],
     "TRANSACTION": ["TRANSACTION", "TRANSACTION NO", "BOOKINGNUMBER", "BOOKING NUMBER"],
@@ -93,17 +94,22 @@ def load_base_2025(path):
         return None
     if SHEET_2025 not in wb.sheetnames:
         return None
-    vol = trx = None
+    whs, cur = {}, None
     for r in wb[SHEET_2025].iter_rows(values_only=True):
-        label = str(r[0] or "")
-        vals = [v if isinstance(v, (int, float)) else None for v in r[2:14]]
-        # ambil kemunculan PERTAMA saja (blok WH Surabaya); blok berikutnya di sheet yang sama adalah gudang lain
-        if vol is None and re.match(r"throughput 2025", label, re.I):
-            vol = vals
-        elif trx is None and re.match(r"numb of line trans 2025", label, re.I):
-            trx = vals
-    return {"y": 2025, "wh": OFFICE_BASE_2025, "vol": vol, "trx": trx} if vol and trx else None
-
+        label = str(r[0] or "").strip()
+        if label.startswith("WH ") and isinstance(r[2], dt.datetime):
+            cur = WH_CODE.get(label[3:].strip())      # None kalau WH belum ada di WH_CODE -> blok dilewati
+            continue
+        if cur is None:
+            continue
+        vals = [float(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else None for v in r[2:14]]
+        d = whs.setdefault(cur, {})
+        if "vol" not in d and re.match(r"throughput 2025", label, re.I):
+            d["vol"] = vals
+        elif "trx" not in d and re.match(r"numb of line trans 2025", label, re.I):
+            d["trx"] = vals
+    whs = {k: v for k, v in whs.items() if v.get("vol") and v.get("trx") and any((x or 0) > 0 for x in v["vol"] + v["trx"])}
+    return {"y": 2025, "wh": whs} if whs else None
 
 def load_productivity(path):
     try:
@@ -171,14 +177,14 @@ def build_data(excels=None):
     g = df.groupby(["y", "m", "act", "cust", "wh", "trx"], as_index=False).agg(vol=("vol", "sum"), qty=("qty", "sum"))
     years = sorted(g["y"].unique().tolist())
     base = None
-    if len(years) < 2:     # tidak ada tahun pembanding di data transaksi -> pakai ringkasan 2025 kalau ada
+    if len(years) < 2:    
         for f in files:
             base = load_base_2025(f)
             if base:
                 break
     prod = next((p for p in (load_productivity(f) for f in files) if p), None)
     print(f"Digabung: {len(df):,} baris item -> {len(g):,} baris transaksi, tahun {years}"
-          + (", pembanding 2025 dari sheet ringkasan (LSB)" if base else ""))
+          + (", pembanding 2025 dari sheet ringkasan: " + ", ".join(base["wh"]) if base else ""))
     rows = [{"y": int(r.y), "m": int(r.m), "act": r.act, "cust": r.cust, "wh": r.wh, "trx": r.trx,
              "vol": round(float(r.vol), 4), "qty": round(float(r.qty), 2)} for r in g.itertuples()]
     data = {"rows": rows, "base": base, "prod": prod, "source": " + ".join(f.name for f in files), "nlines": int(len(df)),
@@ -223,17 +229,18 @@ def inline_page():
 def run_streamlit():
     import streamlit as st
     import streamlit.components.v1 as components
-    st.set_page_config(page_title="Warehouse Dashboard", layout="wide")
-    st.markdown("<style>.block-container{padding-top:1rem}</style>", unsafe_allow_html=True)
+    st.set_page_config(page_title="Warehouse Dashboard", layout="wide", initial_sidebar_state="collapsed")
+    st.markdown("""<style>
+    .block-container{padding-top:1rem}
+    [data-testid="stSidebar"],[data-testid="stSidebarCollapsedControl"],[data-testid="collapsedControl"]{display:none}
+    </style>""", unsafe_allow_html=True)
     files = find_excels()
-    st.sidebar.write("File Excel yang dibaca:", [f.name for f in files] or "tidak ada")
     newest = max((f.stat().st_mtime for f in files if f.exists()), default=0)
     stale = not DATA_JS.exists() or DATA_JS.stat().st_mtime < newest
-    if st.sidebar.button("Muat ulang dari Excel") or stale:
+    if stale:
         with st.spinner("Membaca Excel…"):
             build_data(files)
     components.html(inline_page(), height=1900, scrolling=True)
-
 
 if len(sys.argv) > 1 and sys.argv[1] == "build":
     build_data(sys.argv[2:] or None)
