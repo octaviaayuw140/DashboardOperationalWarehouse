@@ -1,7 +1,7 @@
 const MON=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
 const DATA=window.DATA; // diisi assets/data.js (dibuat app.py dari Excel)
-if(window.Chart&&Chart.defaults){Chart.defaults.font.family='Barlow, system-ui, sans-serif';Chart.defaults.font.size=12.5}
-let rows=DATA.rows,charts={},base25=DATA.base;
+if(window.Chart&&Chart.defaults){Chart.defaults.font.family='Inter, system-ui, sans-serif';Chart.defaults.font.size=10
+}let rows=DATA.rows,charts={},base25=DATA.base;
 const $=id=>document.getElementById(id);
 const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const fmt=n=>Math.round(n).toLocaleString('id-ID');
@@ -27,16 +27,18 @@ function render(){
   const met=$('met').value,y=+$('year').value,wh=$('wh').value,cu=$('cust').value,unit={trx:'transaksi',vol:'CBM',qty:'qty'}[met];
   const base=rows.filter(r=>(!wh||r.wh===wh)&&(!cu||r.cust===cu));
   const cur=base.filter(r=>r.y===y),prv=base.filter(r=>r.y===y-1);
-  const last=cur.length?Math.max(...cur.map(r=>r.m)):0; // YTD: bandingkan bulan yang sama
+  const last=cur.length?Math.max(...cur.map(r=>r.m)):0; 
   const prvYTD=prv.filter(r=>r.m<=last);
-  const useBase=!prv.length&&base25&&base25.y===y-1&&wh==='LSB'&&!cu&&met!=='qty';
-  const bArr=useBase?base25[met].map(v=>v||0):null;
-  const bYTD=useBase?bArr.slice(0,last+1).reduce((a,v)=>a+v,0):0;
+const bmap=base25&&(typeof base25.wh==='string'?{[base25.wh]:base25}:base25.wh);
+const bw=base25&&base25.y===y-1&&wh&&bmap&&bmap[wh];
+const useBase=!prv.length&&!!bw&&!cu&&met!=='qty';
+const newWh=!!wh&&!prv.length&&!bw;
+const bArr=useBase?bw[met].map(v=>v||0):null;  const bYTD=useBase?bArr.slice(0,last+1).reduce((a,v)=>a+v,0):0;
   const I=val(cur,'IN',met),O=val(cur,'OUT',met),T=val(cur,null,met),pI=val(prvYTD,'IN',met),pO=val(prvYTD,'OUT',met),pT=useBase?bYTD:val(prvYTD,null,met);
   const nc=new Set(cur.map(r=>r.cust)).size,pnc=new Set(prvYTD.map(r=>r.cust)).size;
   $('kpis').innerHTML=[
    ['in','Inbound',I,yoy(I,pI)],['out','Outbound',O,yoy(O,pO)],['tot','Total',T,yoy(T,pT)],['cus','Customer aktif',nc,yoy(nc,pnc)]
-  ].map(([c,l,v,g])=>`<div class="card k ${c}"><div class="l">${l} ${c==='cus'?'':'('+unit+')'}</div><div class="v">${fmt(v)}</div>${g.includes('>—<')?'<span class="sub">YoY tidak tersedia untuk filter ini</span>':g+' <span class="sub">vs '+(y-1)+' (Jan–'+MON[last]+')</span>'}</div>`).join('');
+  ].map(([c,l,v,g])=>`<div class="card k ${c}"><div class="l">${l} ${c==='cus'?'':'('+unit+')'}</div><div class="v">${fmt(v)}</div>${g.includes('>—<')?'':g+' <span class="sub">vs '+(y-1)+' (Jan–'+MON[last]+')</span>'}</div>`).join('');
 
   const mi=MON.map((_,m)=>val(cur.filter(r=>r.m===m),'IN',met)),mo=MON.map((_,m)=>val(cur.filter(r=>r.m===m),'OUT',met));
   const pm=useBase?bArr:MON.map((_,m)=>val(prv.filter(r=>r.m===m),null,met)),tm=MON.map((_,m)=>val(cur.filter(r=>r.m===m),null,met));
