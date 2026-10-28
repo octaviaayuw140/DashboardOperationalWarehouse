@@ -92,7 +92,7 @@ function renderProd(){
   $('prod').hidden=false;
   const w=PROD.wh.find(x=>x.name===$('pwh').value)||PROD.wh[0];
   const c=pstat(w.cbm),t=pstat(w.trx),lastM=MON[Math.max(c.last,t.last)];
-  const tile=(l,v,g,s)=>`<div><div class="l">${l}</div><div class="v">${v}</div>${g.includes('>—<')?'<span class="sub">tidak ada data '+PROD.prev_year+'</span>':g+(s?' <span class="sub">'+s+'</span>':'')}</div>`;
+  const tile=(l,v,g,s)=>`<div><div class="l">${l}</div><div class="v">${v}</div>${g.includes('>—<')?'<span class="sub">Tidak ada data '+PROD.prev_year+'</span>':g+(s?' <span class="sub">'+s+'</span>':'')}</div>`;
   $('pk').innerHTML=
     tile('Throughput Jan–'+MON[c.last]+' (CBM)',f1(c.total),'','')+
     tile('Manpower (CBM)',f1(c.mp),'','orang')+
