@@ -65,13 +65,13 @@ const bArr=useBase?bw[met].map(v=>v||0):null;  const bYTD=useBase?bArr.slice(0,l
   const noPrev=!prv.length&&!useBase?' YoY tidak tersedia untuk filter ini: data pembanding 2025 hanya ada untuk Warehouse LSB (total, tanpa pemisahan inbound/outbound dan customer).':'';
 }
 
-/* ================= Produktivitas per warehouse (sheet Produktivitas 2026) ================= */
+/* ================= Produktivitas ================= */
 const PROD=DATA.prod;
 const nums=(arr,idx)=>idx.map(i=>arr[i]).filter(x=>typeof x==='number'&&x>0);
 const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
 function pstat(b){
-  const idx=b.prod.map((v,i)=>typeof v==='number'?i:-1).filter(i=>i>=0);   // bulan yang sudah ada datanya
-  const a26=mean(nums(b.prod,idx)),a25=mean(nums(b.prev,idx));             // pembanding: bulan yang sama tahun lalu
+  const idx=b.prod.map((v,i)=>typeof v==='number'?i:-1).filter(i=>i>=0);   
+  const a26=mean(nums(b.prod,idx)),a25=mean(nums(b.prev,idx));             
   const total=idx.reduce((s,i)=>s+(b.val[i]||0),0);
   const mp=idx.length?b.mp[idx[idx.length-1]]:null;
   return {idx,a26,a25,total,mp,last:idx.length?idx[idx.length-1]:0};
